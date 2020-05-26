@@ -4,6 +4,10 @@
 *.dll
 *.so
 *.dylib
+*.gif
+*DS_Store
+*.BIN # Unix executable file
+*.DMG # Mac executable file
 
 # Test binary, built with `go test -c`
 *.test
@@ -15,3 +19,4 @@
 # vendor/
 
 .idea/
+
