@@ -1,13 +1,17 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
 	"io"
+	"log"
 	"math"
 	"math/rand"
+	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -22,17 +26,42 @@ func main() {
 	// The sequence of images is deterministic unless we seed
 	// the pseudo-random number generator using the current time.
 	rand.Seed(time.Now().UTC().UnixNano())
-	lissajous(os.Stdout)
+	// original method
+	//lissajous(os.Stdout)
+
+	// result redirect to http
+	http.HandleFunc("/liss", func(w http.ResponseWriter, r *http.Request){
+		// Exercise1-12
+		q:= r.URL.Query()
+		var cycles float64
+		var err error
+		if len(q["cycles"]) == 1 {
+			cycles,err = strconv.ParseFloat(q["cycles"][0], 64)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Cycels Transfer: %v", err)
+			}
+		} else {
+			log.Printf("URL Params: Invalid parameter")
+		}
+
+		lissajous(w,cycles)
+	})
+	log.Fatal(http.ListenAndServe("localhost:8030", nil))
 }
 
-func lissajous(out io.Writer) {
+func lissajous(out io.Writer, cycles float64) {
 	const (
-		cycles = 5 // number of complete x oscillator revolutions
+		//cycles = 5 // number of complete x oscillator revolutions
 		res = 0.001 // angular resolution
 		size = 100 // image canvas covers [-size..+size]
 		nframes = 64 // number of animation frames
 		delay = 8 // delay between frames in 10ms units
 	)
+
+	// Default
+	if cycles == 0 {
+		cycles = 5
+	}
 
 	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}
