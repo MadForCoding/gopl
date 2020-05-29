@@ -30,7 +30,4 @@ func isSame(s1, s2 string) bool {
 	}
 
 	return true
-
-
-
 }
