@@ -13,7 +13,7 @@ import (
 func main() {
 	for _, url := range os.Args[1:] {
 		// practice1-8
-		if !strings.HasPrefix(url, "http://") {
+		if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
 			var buf bytes.Buffer
 			buf.WriteString("http://")
 			buf.WriteString(url)
@@ -29,7 +29,6 @@ func main() {
 
 		// practice1-7
 		_, err = io.Copy(os.Stdout, resp.Body)
-
 
 		resp.Body.Close()
 		if err != nil {
