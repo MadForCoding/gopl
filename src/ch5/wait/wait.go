@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-
-
 func main() {
 	if len(os.Args) != 2 {
 		fmt.Fprintf(os.Stderr, "usage: wait url\n")
@@ -43,7 +41,4 @@ func waitForServer(url string) error{
 	return fmt.Errorf("server %s failed to respond after %s", url, timeout)
 
 }
-
-
-
 
